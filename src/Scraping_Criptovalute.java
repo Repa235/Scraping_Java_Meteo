@@ -33,7 +33,6 @@ public class Scraping_Criptovalute {
 		WebDriver driver;
 		Scanner scan = new Scanner(System.in);
 		
-		
 		URL path1 = Scraping_Criptovalute.class.getResource("chromedriver.exe");
 		File file = new File(path1.getFile());
 		
