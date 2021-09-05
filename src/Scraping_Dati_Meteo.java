@@ -19,8 +19,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+/*Il seguente progetto effettua scraping da un sito di dati meteo, 
+ * in particolare preleva i dati dalla pagina principale, li stampa 
+ * in console e li salva su un file csv.*/
 
 public class Scraping_Dati_Meteo {
+	
+/* Il metodo makechromedriver preleva il file chromedriver.exe salvato 
+ * nella stessa cartella della classe Java che stiamo utilizzando e crea 
+ * un nuovo oggetto di tipo webdriver che restituisce in uscita. */
 
 	public static WebDriver MakeChromedriver(){
 		URL path1 = Scraping_Dati_Meteo.class.getResource("chromedriver.exe");
@@ -29,6 +36,9 @@ public class Scraping_Dati_Meteo {
 		WebDriver driver = new ChromeDriver();
 		return driver;
 	}	
+	
+/* Il metodo nameforcsv preleva la data attuale e la usa per nominare il file 
+ * csv che verrà esportato*/
 
 	public static String NameForCsv (){
 		Date oggi = new Date();
@@ -36,21 +46,25 @@ public class Scraping_Dati_Meteo {
 		return name;
 	}
 
+
 	public static void main( String[] args) throws InterruptedException, IOException{
 		String link = "https://www.timeanddate.com/weather/"; 
 		WebDriver driver = MakeChromedriver();
-		driver.manage().window().setSize(new Dimension(900,700)); //ALLARGO FINESTRA PER SELEZIONE NAV
+		driver.manage().window().setSize(new Dimension(900,700)); //Dimensiona la finestra aperta da chromedriver
 		String csvfile=NameForCsv();
-		BufferedWriter writer = new BufferedWriter(new FileWriter(csvfile));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(csvfile)); 
 		try {
 			driver.get(link);
-			Thread.sleep(3000);
-			driver.findElement(By.xpath("/html/body/div[8]/div[2]/div[1]/div[2]/div[2]/button[1]/p")).click();
+			Thread.sleep(3000); //attende qualche secondo per veder comparire la finestra dei cookie
+			driver.findElement(By.xpath("/html/body/div[8]/div[2]/div[1]/div[2]/div[2]/button[1]/p")).click(); //Clicca accetto sulla finestra dei cookie
 			Thread.sleep(2000);
-			Vector<String> tuples = new Vector<String>();
-			String nomi_col="Città,Clima,Temperatura \n";
+			Vector<String> tuples = new Vector<String>(); //crea un vettore dove inserire le varie righe del dataset
+			String nomi_col="Città,Clima,Temperatura \n"; //prima colonna del dataset
 			writer.write(nomi_col);
 
+			/*la tabella da cui preleviamo è divida in tre colonne che separano le informazioni che andremo a prelevare, ogni colonna ha 48 righe, sfrutteremo 
+			  quindi un for che cicla tutte le righe per ogni colonna*/
+			
 			//1 colonna
 			for (int i=2; i<48; i++) {
 				String city = driver.findElement(By.xpath("/html/body/div[6]/section[1]/div/section/div[1]/div/table/tbody/tr["+i+"]/td[1]/a")).getText();
