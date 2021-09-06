@@ -65,8 +65,12 @@ public class Scraping_Dati_Meteo {
 			/*la tabella da cui preleviamo è divida in tre colonne che separano le informazioni che andremo a prelevare, ogni colonna ha 48 righe, sfrutteremo 
 			  quindi un for che cicla tutte le righe per ogni colonna*/
 			
+			int lastrow=46; /*è capitato spesso che modificassero il numero delle righe nella tabella, quindi ho inserito questa variabile 
+			                  per evitare di scriverlo più volte nei for */
+			
 			//1 colonna
-			for (int i=2; i<48; i++) {
+			 System.out.println("Analizzando la 1 colonna...");
+			for (int i=2; i<lastrow; i++) {
 				String city = driver.findElement(By.xpath("/html/body/div[6]/section[1]/div/section/div[1]/div/table/tbody/tr["+i+"]/td[1]/a")).getText();
 				String we = driver.findElement(By.xpath("/html/body/div[6]/section[1]/div/section/div[1]/div/table/tbody/tr["+i+"]/td[3]/img")).getAttribute("title");
 				String temperature = driver.findElement(By.xpath("/html/body/div[6]/section[1]/div/section/div[1]/div/table/tbody/tr["+i+"]/td[4]")).getText();
@@ -74,9 +78,9 @@ public class Scraping_Dati_Meteo {
 				writer.write(tupla);	
 				tuples.add(tupla);
 			}
-
+			System.out.println("Analizzando la 2 colonna...");
 			//2 colonna 
-			for (int i=2; i<48; i++) {
+			for (int i=2; i<lastrow; i++) {
 				String city = driver.findElement(By.xpath("/html/body/div[6]/section[1]/div/section/div[1]/div/table/tbody/tr["+i+"]/td[5]/a")).getText();
 				String we = driver.findElement(By.xpath("/html/body/div[6]/section[1]/div/section/div[1]/div/table/tbody/tr["+i+"]/td[7]/img")).getAttribute("title");
 				String temperature = driver.findElement(By.xpath("/html/body/div[6]/section[1]/div/section/div[1]/div/table/tbody/tr["+i+"]/td[8]")).getText();
@@ -84,9 +88,9 @@ public class Scraping_Dati_Meteo {
 				writer.write(tupla);	
 				tuples.add(tupla);
 			}
-
+			System.out.println("Analizzando la 3 colonna...");
 			//3 colonna
-			for (int i=2; i<48; i++) {
+			for (int i=2; i<lastrow; i++) {
 				String city = driver.findElement(By.xpath("/html/body/div[6]/section[1]/div/section/div[1]/div/table/tbody/tr["+i+"]/td[9]/a")).getText();
 				String we = driver.findElement(By.xpath("/html/body/div[6]/section[1]/div/section/div[1]/div/table/tbody/tr["+i+"]/td[11]/img")).getAttribute("title");
 				String temperature = driver.findElement(By.xpath("/html/body/div[6]/section[1]/div/section/div[1]/div/table/tbody/tr["+i+"]/td[12]")).getText();
@@ -94,8 +98,11 @@ public class Scraping_Dati_Meteo {
 				writer.write(tupla);	
 				tuples.add(tupla);
 			}
-
+			
+			System.out.println("Realizzando il dataset...");
+			Thread.sleep(2000);
 			writer.close();
+			System.out.println("Ecco i dati che ho raccolto...");
 			System.out.println(tuples);
 
 		} catch (Exception e) {
